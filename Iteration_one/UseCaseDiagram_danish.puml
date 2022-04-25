@@ -1,0 +1,69 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+title Use Case diagram for undervisningsplanlægning \n med course-booking system
+
+rectangle  "Actors" {
+   actor Underviser as und
+   actor Administation as admin
+   actor Studerende as st
+}
+
+rectangle  "Supporting Actors" {
+    :Absalon: as Absalon
+    note right of Absalon
+        Undervisningsplatform for '
+        KU-studerende
+    end note
+    :DTU-Learn: as DTULearn
+       note right of DTULearn
+        Undervisningsplatformplatform for
+        studerende knyttet til DTU
+    end note
+}
+rectangle booking-system {
+
+    usecase (Se skema) as SeSkema
+    usecase (Customize Skema) as Customization
+
+    usecase (Book et grupperum) as BookGrupperum
+
+    usecase (Indsend preferencer) as IndsendReferencer
+    usecase (Book engangslokale\n---\n Der kan opstå et behov for at booke\n et lokale efter deadline til engangsbrug) as engangslokale
+    usecase (Valider skema) as SkemaValidering
+    usecase (Rediger brugerprofil) as Brugerprofil
+
+    usecase (Registrer skema-konflikt) as SkemaKonflikt
+
+    usecase (Opret kursus i system) as OpretKursus
+    usecase (Updater system databaser) as UpdaterDatabaser
+    usecase (Tildel underviser) as TildelUnderviser
+}
+
+admin -- OpretKursus
+admin -- UpdaterDatabaser
+admin -- TildelUnderviser
+admin -- SkemaValidering
+
+und -- IndsendReferencer
+und -- engangslokale
+und -- SkemaValidering
+und -- SeSkema
+und -- Customization
+und -- Brugerprofil
+
+st -- BookGrupperum
+st -- SeSkema
+st -- Customization
+
+SeSkema ---- Absalon
+SeSkema ---- DTULearn
+Customization ---- Absalon
+Customization ---- DTULearn
+
+SkemaValidering .[#0000FF]> SkemaKonflikt: <color #0000FF> Include </color>
+SkemaValidering <.[#0000FF] SeSkema: <color #0000FF> Include </color>
+Customization <.[#00FF00] SeSkema: <color #00FF00> Extends </color>
+
+@enduml
