@@ -1,0 +1,76 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class ClassRoom {
+- Location: str
+- Classroom_ID: float
+- Max_capacity: int
+- Faculty: list
+- Building: int
+- Level: int
++ BookRoom(): list
+}
+class Instructor {
+
++ login ()
++ Submit_preference()
++ get_schedule()
++ edit_profile()
++ set_preference()
+
+}
+class Student {
+
++ login()
++ get_schedule()
++ set_customization_schedule()
+
+}
+class Admin {
+
++ Department: list
++ add_course()
++ update_database()
++ assign_instructor()
+
+}
+class User {
++ Uni-ID: str
++ Password: str
++ Name: Str
++ Email: str
++ OfficePhone: int
++ Faculty: list
++ login()
++ set_name()
++ get_uni_ID()
++ login ()
+
+}
+
+class Course {
+- course_name: str
+- course_ID: str
+- course_ects: int
+- course_start: date
+- course_finish: date
+- course_faculty: list
+
+}
+class Preference {
++ time_preffered: time
++ weekdays_preffered: list
++ online: Boolean
++ days_off: list
+
+}
+
+User <|-- Admin
+User <|-- Student
+User <|-- Instructor
+Instructor - Preference: set >
+ClassRoom - Course
+Admin - Course: assign >
+Preference - ClassRoom: Auto generates >
+Student - Course: Attends >
+@enduml
