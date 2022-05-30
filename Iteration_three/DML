@@ -1,0 +1,158 @@
+--
+-- Table structure for table `bruger`
+--
+
+DROP TABLE IF EXISTS `bruger`;
+
+CREATE TABLE `bruger` (
+  `UniID` varchar(6) NOT NULL,
+  `Password` varchar(45) NOT NULL,
+  PRIMARY KEY (`UniID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+INSERT INTO `bruger`
+    VALUES
+    ('fgh123','1234'),
+    ('jsw833','ellen1234'),
+    ('jul456','5678'),
+    ('mhx768','1234'),
+    ('sbr123','Justinbieber6');
+
+--
+-- Table structure for table `kursus`
+--
+
+DROP TABLE IF EXISTS `kursus`;
+
+CREATE TABLE `kursus` (
+  `KursusID` int NOT NULL AUTO_INCREMENT,
+  `KursusNavn` varchar(45) NOT NULL,
+  `ECTS` float NOT NULL,
+  PRIMARY KEY (`KursusID`)
+) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8mb3;
+
+INSERT INTO `kursus`
+    VALUES
+    (101,'Systemudvikling',7.5),
+    (102,'Organisationsanalyse',10);
+--
+-- Table structure for table `kursusunderviser`
+--
+
+DROP TABLE IF EXISTS `kursusunderviser`;
+
+CREATE TABLE `kursusunderviser` (
+  `KursusUnderviserID` int NOT NULL AUTO_INCREMENT,
+  `UnderviserID` int NOT NULL,
+  `KursusID` int NOT NULL,
+  PRIMARY KEY (`KursusUnderviserID`),
+  KEY `UnderviserID_idx` (`UnderviserID`),
+  KEY `KursusID_idx` (`KursusID`),
+  CONSTRAINT `KursusID` FOREIGN KEY (`KursusID`) REFERENCES `kursus` (`KursusID`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+
+INSERT INTO `kursusunderviser`
+    VALUES
+    (1,2,101),
+    (2,3,102);
+
+--
+-- Table structure for table `medarbejder`
+--
+
+CREATE TABLE `medarbejder` (
+  `MedarbejderID` int NOT NULL AUTO_INCREMENT,
+  `Fornavn` varchar(45) NOT NULL,
+  `Efternavn` varchar(45) NOT NULL,
+  `Telefon` varchar(45) NOT NULL,
+  `Email` varchar(45) NOT NULL,
+  `CPR-nummer` varchar(11) NOT NULL,
+  `UniID` varchar(6) NOT NULL,
+  PRIMARY KEY (`MedarbejderID`),
+  KEY `UniID_idx` (`UniID`),
+  CONSTRAINT `UniID` FOREIGN KEY (`UniID`) REFERENCES `bruger` (`UniID`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
+
+INSERT INTO `medarbejder`
+    VALUES
+    (2,'Peter','Jensen','33358877','peterjensen@science.ku.dk','121583-1235','fgh123'),
+    (3,'Lone','Andersen','33357899','Loneandersen@science.ku.dk','231095-6784','jul456');
+
+--
+-- Table structure for table `præferencer`
+--
+
+DROP TABLE IF EXISTS `præferencer`;
+
+CREATE TABLE `præferencer` (
+  `PræferencerID` int NOT NULL AUTO_INCREMENT,
+  `Ugedag` varchar(45) NOT NULL,
+  `TidStart` time NOT NULL,
+  `TidSlut` time NOT NULL,
+  `KursusID` int NOT NULL,
+  PRIMARY KEY (`PræferencerID`),
+  KEY `KursusID` (`KursusID`),
+  CONSTRAINT `præferencer_ibfk_1` FOREIGN KEY (`KursusID`) REFERENCES `kursus` (`KursusID`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `præferencer`
+--
+
+INSERT INTO `præferencer`
+    VALUES
+    (6,'mandag','08:00:00','10:00:00',101),
+    (7,'tirsdag','08:00:00','10:00:00',101),
+    (8,'onsdag','10:00:00','13:00:00',102),
+    (9,'fredag','12:00:00','15:00:00',102),
+    (15,'tirsdag','02:00:00','04:00:00',101),
+    (16,'Onsdag','00:00:00','02:00:00',101),
+    (17,'la','03:00:00','05:00:00',101),
+    (18,'tirsdag','05:00:00','03:00:00',101);
+
+--
+-- Table structure for table `underviser`
+--
+
+DROP TABLE IF EXISTS `underviser`;
+
+CREATE TABLE `underviser` (
+  `UnderviserID` int NOT NULL AUTO_INCREMENT,
+  `Stillingsbetegnelse` varchar(45) NOT NULL,
+  `Fakultet` varchar(45) NOT NULL,
+  `MedarbejderID` int NOT NULL,
+  PRIMARY KEY (`UnderviserID`),
+  KEY `MedarbejderID` (`MedarbejderID`),
+  CONSTRAINT `underviser_ibfk_2` FOREIGN KEY (`MedarbejderID`) REFERENCES `medarbejder` (`MedarbejderID`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
+
+INSERT INTO `underviser`
+    VALUES
+    (2,'Ekstern lektor','science',2),
+    (3,'Ekstern lektor','sund',3);
+
+--
+-- Table structure for table `underviserpræferencer`
+--
+
+DROP TABLE IF EXISTS `underviserpræferencer`;
+
+CREATE TABLE `underviserpræferencer` (
+  `UnderviserPræferencerID` int NOT NULL AUTO_INCREMENT,
+  `UnderviserID` int NOT NULL,
+  `PræferencerID` int NOT NULL,
+  PRIMARY KEY (`UnderviserPræferencerID`),
+  KEY `UnderviserID_idx` (`UnderviserID`),
+  KEY `PræferenceID_idx` (`PræferencerID`),
+  CONSTRAINT `PræferencerID` FOREIGN KEY (`PræferencerID`) REFERENCES `præferencer` (`PræferencerID`),
+  CONSTRAINT `UnderviserID` FOREIGN KEY (`UnderviserID`) REFERENCES `underviser` (`UnderviserID`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
+
+
+INSERT INTO `underviserpræferencer`
+    VALUES
+    (1,2,6),
+    (2,2,7),
+    (3,3,8),
+    (4,3,9);
+

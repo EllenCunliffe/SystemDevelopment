@@ -1,0 +1,140 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class ClassRoom {
++ location: str
++ classroom_id: float
++ type: list
++ max_capacity: int
++ faculty: list
++ building: int
++ level: int
++ view_classroom()
++ add_classroom ()
++ set_max_capacity()
++ set_type()
++ set_building()
++ set_location()
++ set-level()
+}
+
+class Instructor {
+- instructorID: int
+- position: str
+- faculty: Faculty
+- employeeID: int
+- courses: List[Course]
+- holidays: List[Holidays]
++ save_preference()
++ update_preference()
++ validate_schedule()
++ view_schedule ()
++ view_course_list ()
+}
+
+class Student {
+- first_name: str
+- last_name: str
+- phone: str
+- email: str
++ line_of_study: str
++ get_uni_mail()
++ view_schedule()
+
+}
+
+class Admin {
++ Department: str
++ add_course()
++ update_database()
++ assign_instructor()
++ view_instructor_preference ()
+}
+
+class Employee {
+- first_name: str
+- last_name: str
+- office_phone: str
+- email: str
+- cpr_number: str
+
++ set_first_name()
++ get_first_name()
++ set_last_name()
++ get_last_name()
++ set_office_phone()
++ get_office_phone()
++ set_email()
++ get_email()
++ set_cpr_number()
++ get_cpr_number()
+}
+
+enum faculty {
+KU SUND
+KU SCIENCE
+DTU
+
+}
+
+
+class User {
+- uni_id: str
+- password: str
+
++ set_uni_id()
++ get_uni_id()
++ set_password()
++ get_password()
+}
+
+class Observer {
++ update()
+}
+
+class Course {
++ course_id: str
++ name: str
++ ects: float
++ instructor: Instructor
++ topics: list[Topic]
++ equipments: list[Equipment]
+# online, physical or both
++ form_of_teaching: list[FormTeaching]
+
+}
+
+class Preference {
++ timeslot_preferred_start: list
++ timeslot_preferred_end: list
++ weekdays_preferred: list
++ course_id: int
+}
+
+class CourseSchedule {
++ date: date
++ timeslot: list[time]
++ classroom: ClassRoom
++ course: Course
++ status: list[Status]
+}
+
+
+User <|-- Student
+User <|-- Employee
+
+Employee <|--- Admin
+Employee <|- Instructor
+
+Student "1" -- "1..*" Course: Attends >
+
+Instructor "1" -- "1..*" Course: teaches >
+
+Instructor "1" -- "1" Preference: set >
+
+Observer <-- User
+Preference - CourseSchedule: Auto generates >
+Course "1" -- "1..*" ClassRoom
+
+
+@enduml
